@@ -1,0 +1,38 @@
+const readline = require('readline');
+
+const letters = [];
+for (let i = 97; i <= 122; i++) letters.push(String.fromCharCode(i));
+for (let i = 65; i <= 90; i++) letters.push(String.fromCharCode(i));
+
+function caesarEncrypt(input, step) {
+  return input
+    .split('')
+    .map((char) => {
+      let idx = letters.indexOf(char);
+      if (idx === -1) return char;
+      let newIdx = (idx + step) % letters.length;
+      if (newIdx < 0) newIdx += letters.length;
+      return letters[newIdx];
+    })
+    .join('');
+}
+
+function caesarDecrypt(input, step) {
+  return caesarEncrypt(input, -step);
+}
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
+
+rl.question('Введіть текст для шифрування: ', (text) => {
+  rl.question('Введіть зсув: ', (step) => {
+    step = parseInt(step, 10);
+    const encrypted = caesarEncrypt(text, step);
+    console.log('Зашифрований текст:', encrypted);
+    const decrypted = caesarDecrypt(encrypted, step);
+    console.log('Розшифрований текст:', decrypted);
+    rl.close();
+  });
+});
